@@ -16,9 +16,11 @@ tags: ["polya", "review", "static-site", "github-pages"]
 **Reviewed Target:** `index.html`, `account-deletion.html`, `CONTEXT.md` (uncommitted working tree)
 **Specification Ref:** `docs/spec/laci-rw-deletion-pages-spec.md` (v1.5.0, Approved)
 **Plan Ref:** `docs/plan/laci-rw-deletion-pages-plan.md` (v1.1.0, Planned)
-**Review Status:** **Approved (Conditional)** — artifact-level audit passes with zero
-defects; the live HTTP acceptance gate (AC-001/002/004/006/007) is **pending**
-because TASK-003/TASK-009 (commit & push) were deferred by operator instruction.
+**Review Status:** **Approved** — artifact-level audit passes with zero defects,
+and the live HTTP acceptance gate (AC-001/002/004/006/007) **passed** on
+2026-10-19 after the operator's push and GitHub Pages redeploy (see §Verification
+Record, live gate). Remaining scope is operator-side Play Console action only
+(TASK-013/TASK-014).
 
 ---
 
@@ -220,6 +222,22 @@ suite **not executed** (blocked on operator-deferred push).
 | D3 fields / D5 semantics / 14-business-day SLA (both pages) | PASS (6/6) |
 | E-anchors E1/E2/E6/E7/E8 + stale-artifact absence | PASS |
 | Byte-parity diff vs JDIH reference (Table A/B/C delta window) | PASS (delta confined to Table D + 3 provenance trims) |
+
+**Live gate (executed 2026-10-19, post-push, plain GET without cookies/JS):**
+
+| Check | Observed |
+| :--- | :--- |
+| AC-001 `/account-deletion.html` | 200 + `<main>` + exact H1 + literal email |
+| AC-004 `assets/diskominfo_kota.png` / `assets/ic_profile.png` | 200, 131854 B / 52773 B, both valid PNG signatures |
+| AC-002 site root `/` | 200 + exact H1 + `account-deletion.html` link + mailto link + both deletion headings + `<small>DISKOMINFO KOTA BANDUNG</small>` + generator attribution absent |
+| AC-006 full index manifest, JS disabled | PASS (all 16 regions in raw DOM) |
+| AC-003 D5 data classes + D3 field lists | PASS on both live pages |
+| AC-005 link safety / encoding | PASS (8/8 `target`–`rel` parity; 6/6 mailto encoded) |
+| AC-008 provider fidelity | PASS (7/7 names, order, hrefs) |
+| AC-009 pinned stack live | PASS (zero `<script>`; Bootstrap 5.3.8 + SRI intact) |
+| AC-007 **negative simulation** wrong-case `Account-Deletion.html` | HTTP **404** → gate verdict HARD FAILURE (correct; cannot silently pass) |
+| AC-007 **negative simulation** broken path | HTTP **404** → gate verdict HARD FAILURE (correct) |
+| Deploy drift check (SHA-256 live vs committed) | PASS — byte-identical for both pages |
 
 ---
 
