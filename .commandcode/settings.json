@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Shell(powershell -NoProfile -Command \" $ref = Get-Content 'D:\\DeployAplikasi\\privacy-policy-jdih\\privacypolicy-jdihmobile\\index.html' $new = Get-Content 'D:\\DeployAplikasi\\privacy-policy-lacirwbandung\\index.html' $diff = Compare-Object $ref $new -IncludeEqual:$false | Select-Object -ExpandProperty InputObject 'INDEX DIFF vs reference:'; $diff $ref2 = Get-Content 'D:\\DeployAplikasi\\privacy-policy-jdih\\privacypolicy-jdihmobile\\account-deletion.html' $new2 = Get-Content 'D:\\DeployAplikasi\\privacy-policy-lacirwbandung\\account-deletion.html' $diff2 = Compare-Object $ref2 $new2 -IncludeEqual:$false | Select-Object -ExpandProperty InputObject 'DELETION DIFF vs reference:'; $diff2 \")",
+      "powershell"
+    ],
+    "deny": [],
+    "defaultMode": "default"
+  }
+}
